@@ -2,19 +2,24 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
+        static Scanner scanner = new Scanner(System.in);
+        static int number1, number2;
+        static char operation;
+        static int result;
 
-    static Scanner scanner = new Scanner(System.in);
-    static int number1, number2;
-    static char operation;
-    static int result;
+        public static void main(String[] args) {
 
-    public static void main(String[] args) {
 
-        System.out.println(
-            "Введите арифметическое выражение с двумя аргумуентами затем нажмите Enter ");
+        System.out.println("Введите арифметическое выражение с двумя аргументами затем нажмите Enter ");
 
         String userInput = scanner.nextLine();
         char[] under_char = new char[10];
+
+        //ограничение на ввод
+        while ((userInput.length() < 1) || (userInput.length() > 10)) {
+            System.out.println("Ввод слишком длинный, Пожалуста, введите не более 10 знаков.");
+            userInput = scanner.next();
+        }
 
         for (int i = 0; i < userInput.length(); i++) {
 
@@ -37,89 +42,59 @@ public class Main {
         String stable00 = blacks[0];
         String stable01 = blacks[1];
         String string03 = stable01.trim();
-
-        if (isRoman(stable00)) {
-            number1 = romanToNumber(stable00);
+        number1 = romanToNumber(stable00);
+        number2 = romanToNumber(string03);
+        if (number1 < 0 && number2 < 0) {
+            result = 0;
         } else {
-            number1 = Integer.parseInt(stable00);
-        }
-
-        if (isRoman(string03)) {
-            number2 = romanToNumber(string03);
-        } else {
-            number2 = Integer.parseInt(string03);
-        }
-
-        result = calculated(number1, number2, operation);
-        if (isRoman(stable00) && isRoman(string03)) {
+            result = calculated(number1, number2, operation);
             System.out.println("---Результат для римских цифр----");
             String resultRoman = convertIntToRoman(result);
-            System.out.println(
-                stable00 + " " + operation + " " + string03 + " = " + resultRoman);
-        } else if (isRoman(string03) || isRoman(stable00)) {
-
-                throw new InputMismatchException("Оба числа должны быть либо римскими либи арабскими");
-
-            } else {
-                System.out.println("--Результат для арабских цифр----");
-                System.out.println(number1 + " " + operation + " " + number2 + " = " + result);
-            }
+            System.out.println(stable00 + " " + operation + " " + string03 + " = " + resultRoman);
+        }
+        number1 = Integer.parseInt(stable00);
+        number2 = Integer.parseInt(string03);
+        result = calculated(number1, number2, operation);
+        System.out.println("--Результат для арабских цифр----");
+        System.out.println(number1 + " " + operation + " " + number2 + " = " + result);
     }
 
-    private static String convertIntToRoman(int numArabian) {
-        String[] roman =
-            {"O", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII",
-                "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX",
-                "XXI", "XXII", "XXIII", "XXIV", "XXV", "XXVI", "XXVII", "XXVIII", "XXIX", "XXX",
-                "XXXI", "XXXII", "XXXIII", "XXXIV", "XXXV", "XXXVI", "XXXVII", "XXXVIII",
-                "XXXIX", "XL",
-                "XLI", "XLII", "XLIII", "XLIV", "XLV", "XLVI", "XLVII", "XLVIII", "XLIX", "L",
-                "LI", "LII", "LIII", "LIV", "LV", "LVI", "LVII", "LVIII", "LIX", "LX",
+    private static String convertIntToRoman (int numArabian) {
+        String[] roman = {"O", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX",
+                "XXI", "XXII", "XXIII", "XXIV", "XXV", "XXVI", "XXVII", "XXVIII", "XXIX", "XXX", "XXXI", "XXXII", "XXXIII", "XXXIV", "XXXV", "XXXVI", "XXXVII", "XXXVIII", "XXXIX", "XL",
+                "XLI", "XLII", "XLIII", "XLIV", "XLV", "XLVI", "XLVII", "XLVIII", "XLIX", "L", "LI", "LII", "LIII", "LIV", "LV", "LVI", "LVII", "LVIII", "LIX", "LX",
                 "LXI", "LXII", "LXIII", "LXIV", "LXV", "LXVI", "LXVII", "LXVIII", "LXIX", "LXX",
-                "LXXI", "LXXII", "LXXIII", "LXXIV", "LXXV", "LXXVI", "LXXVII", "LXXVIII",
-                "LXXIX", "LXXX",
-                "LXXXI", "LXXXII", "LXXXIII", "LXXXIV", "LXXXV", "LXXXVI", "LXXXVII",
-                "LXXXVIII", "LXXXIX", "XC",
+                "LXXI", "LXXII", "LXXIII", "LXXIV", "LXXV", "LXXVI", "LXXVII", "LXXVIII", "LXXIX", "LXXX",
+                "LXXXI", "LXXXII", "LXXXIII", "LXXXIV", "LXXXV", "LXXXVI", "LXXXVII", "LXXXVIII", "LXXXIX", "XC",
                 "XCI", "XCII", "XCIII", "XCIV", "XCV", "XCVI", "XCVII", "XCVIII", "XCIX", "C"
-            };
+        };
         final String s = roman[numArabian];
         return s;
     }
 
 
-    private static int romanToNumber(String roman) {
+    private static int romanToNumber (String roman) {
         try {
-            switch (roman) {
-                case "I" -> {
-                    return 1;
-                }
-                case "II" -> {
-                    return 2;
-                }
-                case "III" -> {
-                    return 3;
-                }
-                case "IV" -> {
-                    return 4;
-                }
-                case "V" -> {
-                    return 5;
-                }
-                case "VI" -> {
-                    return 6;
-                }
-                case "VII" -> {
-                    return 7;
-                }
-                case "VIII" -> {
-                    return 8;
-                }
-                case "IX" -> {
-                    return 9;
-                }
-                case "X" -> {
-                    return 10;
-                }
+            if (roman.equals("I")) {
+                return 1;
+            } else if (roman.equals("II")) {
+                return 2;
+            } else if (roman.equals("III")) {
+                return 3;
+            } else if (roman.equals("IV")) {
+                return 4;
+            } else if (roman.equals("V")) {
+                return 5;
+            } else if (roman.equals("VI")) {
+                return 6;
+            } else if (roman.equals("VII")) {
+                return 7;
+            } else if (roman.equals("VIII")) {
+                return 8;
+            } else if (roman.equals("IX")) {
+                return 9;
+            } else if (roman.equals("X")) {
+                return 10;
             }
         } catch (InputMismatchException e) {
             throw new InputMismatchException("Неверный формат данных");
@@ -127,7 +102,7 @@ public class Main {
         return -1;
     }
 
-    public static int calculated(int num1, int num2, char op) {
+    public static int calculated (int num1, int num2, char op) {
         int result = 0;
         switch (op) {
             case '+':
@@ -150,12 +125,8 @@ public class Main {
                 }
                 break;
             default:
-                throw new IllegalArgumentException("Не верный знак арифметической операции");
+                throw new IllegalArgumentException("Не верный знак операции");
         }
         return result;
-    }
-
-    private static boolean isRoman(String str) {
-        return str.matches("^(?i)(I|V|X|L|C|D|M)+$");
     }
 }
