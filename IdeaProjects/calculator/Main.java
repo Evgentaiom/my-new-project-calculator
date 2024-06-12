@@ -47,8 +47,8 @@ public class Main {
             number2 = Integer.parseInt(part2);
         }
 
-        if (number1 > 10 || number2 > 10) {
-            throw new InputMismatchException("Операнды не могут быть больше 10");
+        if (number1 > 10 || number1 <1 || number2 <1 || number2 > 10) {
+            throw new InputMismatchException("Операнды не могут быть больше 10  и не могут быть меньше 1");
         }
 
         result = calculated(number1, number2, operation);
